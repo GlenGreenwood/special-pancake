@@ -1,5 +1,6 @@
 import webbrowser
 import json
+from flask import Flask, request, redirect
 
 # Establishing default bookmark groups and loading any existing bookmarks from a JSON file
 def load_groups():
@@ -14,21 +15,21 @@ def load_groups():
 groups=load_groups()
 
 #defines the function that adds a bookmark to the one of the selected sections. This funtion is called in many others.
-def add_bookmark():
-    choice = f"bookmarks{input('what set of bookmarks do you want to add a bookmark to? (1, 2, or 3)? ')}"
-    new_bookmark = input("Enter the URL of the new bookmark: ")
-    groups[choice].append(new_bookmark)
+def add_bookmark(section, url):
+    choice = f"bookmarks{str(section)}"
+    groups[choice].append(url)
     with open('bookmarks.json', 'w') as json_file:
         json.dump(groups, json_file, indent=4)
 
-def add_bookmark_loop():
-    add_bookmark()
-    while True:
-        if input("Would you like to add another bookmark? (y/n): ").lower() == 'y':
-            add_bookmark()
-        else:
-            print("Bookmarks updated.")
-            break
+#This doesn't work because I would need to pass the parameters multiple times while the function is running.
+#def add_bookmark_loop(section, url):
+#    add_bookmark(section, url)
+#    while True:
+#        if input("Would you like to add another bookmark? (y/n): ").lower() == 'y':
+#            add_bookmark()
+#        else:
+#            return "bookmarks updated"
+#            break
         
 def addsection():
     key=f"bookmarks{len(groups)+1}"
