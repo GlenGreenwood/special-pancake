@@ -12,6 +12,7 @@ def load_groups():
     return groups
 
 groups=load_groups()
+
 #defines the function that adds a bookmark to the one of the selected sections. This funtion is called in many others.
 def add_bookmark():
     choice = f"bookmarks{input('what set of bookmarks do you want to add a bookmark to? (1, 2, or 3)? ')}"
