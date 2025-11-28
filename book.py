@@ -64,22 +64,24 @@ def deviceType():
 def backgroundImage():
     type=deviceType()
     if type == 'Phone':
-        bgImage = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pixelstalk.net%2Fwp-content%2Fuploads%2F2016%2F07%2FDownload-Free-Pictures-3840x2160.jpg&f=1&nofb=1&ipt=832199581a53e02994f6809a03e36af683a87209e0e0a4ab3e9efad84a270390"
+        bgImage = "placeholder"
     else:
-        bgImage = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pixelstalk.net%2Fwp-content%2Fuploads%2F2016%2F07%2FDownload-Free-Pictures-3840x2160.jpg&f=1&nofb=1&ipt=832199581a53e02994f6809a03e36af683a87209e0e0a4ab3e9efad84a270390"
+        bgImage = "placeholder"
     return bgImage
 
 def colors():
     bgImage = backgroundImage()
     color_thief = ColorThief(bgImage)
-    colors=color_thief.get_palette(color_count=6)
+    colors=color_thief.get_palette(color_count=5)
     ddgBackgroundcolor = "placeholder"
     ddgTextcolor = "placeholder"
     ddgLinkcolor = "placeholder"
     ddgHeadercolor = "placeholder"
     ddgURLcolor = "placeholder"
     return colors
+
 print(colors())
+
 def SpirtualThought():
     pass
 
