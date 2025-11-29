@@ -61,25 +61,52 @@ def deviceType():
         device_type = 'Desktop'
     return device_type
 
-def backgroundImage():
-    type=deviceType()
+def backgroundImage(device_type):
     if type == 'Phone':
-        bgImage = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pixelstalk.net%2Fwp-content%2Fuploads%2F2016%2F07%2FDownload-Free-Pictures-3840x2160.jpg&f=1&nofb=1&ipt=832199581a53e02994f6809a03e36af683a87209e0e0a4ab3e9efad84a270390"
+        bgImage = "Screenshot 2025-05-02 3.49.31 PM.png"
     else:
-        bgImage = "https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fwww.pixelstalk.net%2Fwp-content%2Fuploads%2F2016%2F07%2FDownload-Free-Pictures-3840x2160.jpg&f=1&nofb=1&ipt=832199581a53e02994f6809a03e36af683a87209e0e0a4ab3e9efad84a270390"
+        bgImage = "Screenshot 2025-05-02 3.49.31 PM.png"
     return bgImage
 
-def colors():
-    bgImage = backgroundImage()
+def calculate_luminance(color):
+    """Calculate the relative luminance of an RGB color."""
+    r, g, b = [x / 255.0 for x in color]  # Normalize RGB values
+    luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b  # Calculate luminance
+    return luminance
+
+def rgb_to_hex(rgb_colors):
+    hex_colors = []
+    for rgb in rgb_colors:
+        # Ensure the RGB value is in the valid range
+        if all(0 <= value <= 255 for value in rgb):
+            hex_color = '{0:02X}{1:02X}{2:02X}'.format(rgb[0], rgb[1], rgb[2])
+            hex_colors.append(hex_color)
+        else:
+            raise ValueError("RGB values must be between 0 and 255.")
+    return hex_colors
+
+def crembrule(device_type):
+    bgImage = backgroundImage(device_type)
     color_thief = ColorThief(bgImage)
-    colors=color_thief.get_palette(color_count=6)
-    ddgBackgroundcolor = "placeholder"
-    ddgTextcolor = "placeholder"
-    ddgLinkcolor = "placeholder"
-    ddgHeadercolor = "placeholder"
-    ddgURLcolor = "placeholder"
-    return colors
-print(colors())
+    palette=color_thief.get_palette(color_count=5)
+    sorted_palette = sorted(palette, key=calculate_luminance)
+    hex_codes=rgb_to_hex(sorted_pallett)
+    ddgBackgroundcolor = hex_codes[4]
+    ddgTextcolor = hex_codes[3]
+    ddgLinkcolor = hex_codes[2]
+    ddgHeadercolor = hex_codes[1]
+    ddgURLcolor = hex_codes[0]
+    crembrule={
+        "ddgBackgroundcolor": ddgBackgroundcolor,
+        "ddgTextcolor": ddgTextcolor,
+        "ddgLinkcolor": ddgLinkcolor,
+        "ddgHeadercolor": ddgHeadercolor,
+        "ddgURLcolor": ddgURLcolor
+    }
+    return crembrule
+
+
+
 def SpirtualThought():
     pass
 

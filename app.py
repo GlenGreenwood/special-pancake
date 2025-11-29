@@ -2,13 +2,19 @@ import book as book
 from flask import Flask, request, redirect, render_template
 import json
 import webbrowser
+from colorthief import ColorThief
 app = Flask(__name__)
 
+funPlaceholder = "This is a placeholder for a function I will add later."
 groups = book.load_groups()
 #I am working on the rest of the new tab page before I circle back to bookmarks.
 @app.route('/')
 def home():
-    return render_template('index.html')
+    device_type = book.deviceType()
+    crembrule=book.crembrule(device_type)
+    return render_template('index.html', **crembrule)
+    
+
 
 
 #this current version only lets you add bookmarks with the console. I need to add a form on a seperate page (or a pop-up of some kind) that will take all of the input parameters that the input functions ask for.
