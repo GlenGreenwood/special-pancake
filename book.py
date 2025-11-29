@@ -90,7 +90,7 @@ def crembrule(device_type):
     color_thief = ColorThief(bgImage)
     palette=color_thief.get_palette(color_count=5)
     sorted_palette = sorted(palette, key=calculate_luminance)
-    hex_codes=rgb_to_hex(sorted_pallett)
+    hex_codes=rgb_to_hex(sorted_palette)
     ddgBackgroundcolor = hex_codes[4]
     ddgTextcolor = hex_codes[3]
     ddgLinkcolor = hex_codes[2]
