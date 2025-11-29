@@ -61,26 +61,51 @@ def deviceType():
         device_type = 'Desktop'
     return device_type
 
-def backgroundImage():
-    type=deviceType()
+def backgroundImage(device_type):
     if type == 'Phone':
-        bgImage = "placeholder"
+        bgImage = "Screenshot 2025-05-02 3.49.31 PM.png"
     else:
-        bgImage = "placeholder"
+        bgImage = "Screenshot 2025-05-02 3.49.31 PM.png"
     return bgImage
 
-def colors():
-    bgImage = backgroundImage()
-    color_thief = ColorThief(bgImage)
-    colors=color_thief.get_palette(color_count=5)
-    ddgBackgroundcolor = "placeholder"
-    ddgTextcolor = "placeholder"
-    ddgLinkcolor = "placeholder"
-    ddgHeadercolor = "placeholder"
-    ddgURLcolor = "placeholder"
-    return colors
+def calculate_luminance(color):
+    """Calculate the relative luminance of an RGB color."""
+    r, g, b = [x / 255.0 for x in color]  # Normalize RGB values
+    luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b  # Calculate luminance
+    return luminance
 
-print(colors())
+def rgb_to_hex(rgb_colors):
+    hex_colors = []
+    for rgb in rgb_colors:
+        # Ensure the RGB value is in the valid range
+        if all(0 <= value <= 255 for value in rgb):
+            hex_color = '{0:02X}{1:02X}{2:02X}'.format(rgb[0], rgb[1], rgb[2])
+            hex_colors.append(hex_color)
+        else:
+            raise ValueError("RGB values must be between 0 and 255.")
+    return hex_colors
+
+def crembrule(device_type):
+    bgImage = backgroundImage(device_type)
+    color_thief = ColorThief(bgImage)
+    palette=color_thief.get_palette(color_count=5)
+    sorted_palette = sorted(palette, key=calculate_luminance)
+    hex_codes=rgb_to_hex(sorted_palette)
+    ddgBackgroundcolor = hex_codes[4]
+    ddgTextcolor = hex_codes[3]
+    ddgLinkcolor = hex_codes[2]
+    ddgHeadercolor = hex_codes[1]
+    ddgURLcolor = hex_codes[0]
+    crembrule={
+        "ddgBackgroundcolor": ddgBackgroundcolor,
+        "ddgTextcolor": ddgTextcolor,
+        "ddgLinkcolor": ddgLinkcolor,
+        "ddgHeadercolor": ddgHeadercolor,
+        "ddgURLcolor": ddgURLcolor
+    }
+    return crembrule
+
+
 
 def SpirtualThought():
     pass
