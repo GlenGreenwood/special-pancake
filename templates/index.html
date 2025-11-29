@@ -7,6 +7,29 @@
             background-color:{{ntBackgroundcolor}};
             color:{{ntTextcolor}};
             text-align:center;
+            background-image: url('static/{{backgroundImage}}');
+            background-size: fit;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        h1{
+            background-color: {{ntBackgroundcolor}};
+        }
+        #bar{
+            border-style:solid;
+            border-color:{{ntBordercolor}};
+            width:50%;
+            padding:10px;
+            margin-top:20%;
+            background-color:{{ntBarcolor}};
+        }
+        button{
+            background-color:{{ntButtoncolor}};
+            color:{{ntTextcolor}};
+            border:none;
+            padding:5px 10px;}
+        #searchB{
+            cursor:pointer;
         }
     </style>
 </head>
@@ -31,7 +54,7 @@
             <!--kp=Safe Search-->
             <input type="hidden" name="kp" value="1"/>
             <input type="text" name="q" placeholder="{{funPlaceholder}}" aria-label="Search on DuckDuckGo"/>
-            <button type="submit">Search</button>
+            <button type="submit" id="searchB">Search</button>
         </form>
     </div>
 

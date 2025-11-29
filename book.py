@@ -61,16 +61,22 @@ def deviceType():
         device_type = 'Desktop'
     return device_type
 
-def backgroundImage(device_type):
-    if type == 'Phone':
-        bgImage = "Screenshot 2025-05-02 3.49.31 PM.png"
+def backgroundImage(device_type, darkmode):
+    if device_type == 'Phone':
+        if darkmode==True:
+            bgImage = "pilot.png"
+        else:
+            bgImage = "pilot.png"
     else:
-        bgImage = "Screenshot 2025-05-02 3.49.31 PM.png"
+        if darkmode==True:
+            bgImage = "pilot.png"
+        else:
+            bgImage = "pilot.png"
     return bgImage
 
-def calculate_luminance(color):
+def calculate_luminance(palette):
     """Calculate the relative luminance of an RGB color."""
-    r, g, b = [x / 255.0 for x in color]  # Normalize RGB values
+    r, g, b = [x / 255.0 for x in palette]  # Normalize RGB values
     luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b  # Calculate luminance
     return luminance
 
@@ -85,15 +91,15 @@ def rgb_to_hex(rgb_colors):
             raise ValueError("RGB values must be between 0 and 255.")
     return hex_colors
 
-def palette(device_type, darkmode):
-    bgImage = backgroundImage(device_type)
+def palette(device_type, darkmode, backgroundImage):
+    bgImage = backgroundImage
     color_thief = ColorThief(bgImage)
     palette=color_thief.get_palette(color_count=5)
     return palette
     
-def engine_crembrule(device_type, darkmode):    
-    palette=palette(device_type, darkmode)
-    sorted_palette = sorted(palette, key=calculate_luminance)
+def engine_crembrule(device_type, darkmode, backgroundImage):    
+    eng_palette=palette(device_type, darkmode, backgroundImage)
+    sorted_palette = sorted(eng_palette, key=calculate_luminance)
     hex_codes=rgb_to_hex(sorted_palette)
     if darkmode==True:
         ddgBackgroundcolor = hex_codes[0]
@@ -116,6 +122,21 @@ def engine_crembrule(device_type, darkmode):
     }
     return engine_crembrule
 
+def css_crembrule(device_type, darkmode, backgroundImage):
+    hex_palette= rgb_to_hex(palette(device_type, darkmode, backgroundImage))
+    ntBackgroundcolor = "#"+hex_palette[4]
+    ntBarcolor = "#"+hex_palette[3]
+    ntTextcolor = "#"+hex_palette[0]
+    ntButtoncolor = "#"+hex_palette[2]
+    ntBordercolor = "#"+hex_palette[1]
+    css_crembrule={
+        "ntBackgroundcolor": ntBackgroundcolor,
+        "ntBarcolor": ntBarcolor,
+        "ntTextcolor": ntTextcolor,
+        "ntButtoncolor": ntButtoncolor,
+        "ntBordercolor": ntBordercolor
+    }
+    return css_crembrule
 
 
 def SpirtualThought():
