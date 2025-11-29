@@ -85,25 +85,36 @@ def rgb_to_hex(rgb_colors):
             raise ValueError("RGB values must be between 0 and 255.")
     return hex_colors
 
-def crembrule(device_type):
+def palette(device_type, darkmode):
     bgImage = backgroundImage(device_type)
     color_thief = ColorThief(bgImage)
     palette=color_thief.get_palette(color_count=5)
+    return palette
+    
+def engine_crembrule(device_type, darkmode):    
+    palette=palette(device_type, darkmode)
     sorted_palette = sorted(palette, key=calculate_luminance)
     hex_codes=rgb_to_hex(sorted_palette)
-    ddgBackgroundcolor = hex_codes[4]
-    ddgTextcolor = hex_codes[3]
-    ddgLinkcolor = hex_codes[2]
-    ddgHeadercolor = hex_codes[1]
-    ddgURLcolor = hex_codes[0]
-    crembrule={
+    if darkmode==True:
+        ddgBackgroundcolor = hex_codes[0]
+        ddgTextcolor = hex_codes[4]
+        ddgLinkcolor = hex_codes[3]
+        ddgHeadercolor = hex_codes[1]
+        ddgURLcolor = hex_codes[2]
+    else:
+        ddgBackgroundcolor = hex_codes[4]
+        ddgTextcolor = hex_codes[0]
+        ddgLinkcolor = hex_codes[1]
+        ddgHeadercolor = hex_codes[3]
+        ddgURLcolor = hex_codes[2]
+    engine_crembrule={
         "ddgBackgroundcolor": ddgBackgroundcolor,
         "ddgTextcolor": ddgTextcolor,
         "ddgLinkcolor": ddgLinkcolor,
         "ddgHeadercolor": ddgHeadercolor,
         "ddgURLcolor": ddgURLcolor
     }
-    return crembrule
+    return engine_crembrule
 
 
 
