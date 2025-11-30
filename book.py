@@ -61,16 +61,24 @@ def deviceType():
         device_type = 'Desktop'
     return device_type
 
-def backgroundImage(device_type):
-    if type == 'Phone':
-        bgImage = "Screenshot 2025-05-02 3.49.31 PM.png"
+def backgroundImage(device_type, darkmode):
+    if device_type == 'Desktop':
+        if darkmode==True:
+            choices=["4.png","2.png"]
+            bgImage = random.choice(choices)
+        else:
+            choices=["1.png","3.png"]
+            bgImage = random.choice(choices)
     else:
-        bgImage = "Screenshot 2025-05-02 3.49.31 PM.png"
+        if darkmode==True:
+            bgImage = "pilot.png"
+        else:
+            bgImage = "pilot.png"
     return bgImage
 
-def calculate_luminance(color):
+def calculate_luminance(palette):
     """Calculate the relative luminance of an RGB color."""
-    r, g, b = [x / 255.0 for x in color]  # Normalize RGB values
+    r, g, b = [x / 255.0 for x in palette]  # Normalize RGB values
     luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b  # Calculate luminance
     return luminance
 
@@ -85,26 +93,52 @@ def rgb_to_hex(rgb_colors):
             raise ValueError("RGB values must be between 0 and 255.")
     return hex_colors
 
-def crembrule(device_type):
-    bgImage = backgroundImage(device_type)
+def palette(device_type, darkmode, backgroundImage):
+    bgImage = backgroundImage
     color_thief = ColorThief(bgImage)
     palette=color_thief.get_palette(color_count=5)
-    sorted_palette = sorted(palette, key=calculate_luminance)
+    return palette
+    
+def engine_crembrule(device_type, darkmode, backgroundImage):    
+    eng_palette=palette(device_type, darkmode, backgroundImage)
+    sorted_palette = sorted(eng_palette, key=calculate_luminance)
     hex_codes=rgb_to_hex(sorted_palette)
-    ddgBackgroundcolor = hex_codes[4]
-    ddgTextcolor = hex_codes[3]
-    ddgLinkcolor = hex_codes[2]
-    ddgHeadercolor = hex_codes[1]
-    ddgURLcolor = hex_codes[0]
-    crembrule={
+    if darkmode==True:
+        ddgBackgroundcolor = hex_codes[0]
+        ddgTextcolor = hex_codes[4]
+        ddgLinkcolor = hex_codes[3]
+        ddgHeadercolor = hex_codes[1]
+        ddgURLcolor = hex_codes[2]
+    else:
+        ddgBackgroundcolor = hex_codes[4]
+        ddgTextcolor = hex_codes[0]
+        ddgLinkcolor = hex_codes[1]
+        ddgHeadercolor = hex_codes[3]
+        ddgURLcolor = hex_codes[2]
+    engine_crembrule={
         "ddgBackgroundcolor": ddgBackgroundcolor,
         "ddgTextcolor": ddgTextcolor,
         "ddgLinkcolor": ddgLinkcolor,
         "ddgHeadercolor": ddgHeadercolor,
         "ddgURLcolor": ddgURLcolor
     }
-    return crembrule
+    return engine_crembrule
 
+def css_crembrule(device_type, darkmode, backgroundImage):
+    hex_palette= rgb_to_hex(palette(device_type, darkmode, backgroundImage))
+    ntBackgroundcolor = "#"+hex_palette[4]
+    ntBarcolor = "#"+hex_palette[3]
+    ntTextcolor = "#"+hex_palette[0]
+    ntButtoncolor = "#"+hex_palette[2]
+    ntBordercolor = "#"+hex_palette[1]
+    css_crembrule={
+        "ntBackgroundcolor": ntBackgroundcolor,
+        "ntBarcolor": ntBarcolor,
+        "ntTextcolor": ntTextcolor,
+        "ntButtoncolor": ntButtoncolor,
+        "ntBordercolor": ntBordercolor
+    }
+    return css_crembrule
 
 
 def SpirtualThought():

@@ -1,30 +1,61 @@
-import book as book
-from flask import Flask, request, redirect, render_template
-import json
-import webbrowser
-from colorthief import ColorThief
-app = Flask(__name__)
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New Tab</title>
+    <style>
+        body{
+            background-color:{{ntBackgroundcolor}};
+            color:{{ntTextcolor}};
+            text-align:center;
+            background-image: url('static/{{backgroundImage}}');
+            background-size: fit;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        h1{
+            background-color: {{ntBackgroundcolor}};
+        }
+        #bar{
+            border-style:solid;
+            border-color:{{ntBordercolor}};
+            width:50%;
+            padding:10px;
+            margin-top:20%;
+            background-color:{{ntBarcolor}};
+        }
+        button{
+            background-color:{{ntButtoncolor}};
+            color:{{ntTextcolor}};
+            border:none;
+            padding:5px 10px;}
+        #searchB{
+            cursor:pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>New Tab<h1>
+    <div id="bar" style="margin:auto; border-width:7px;">
+        <form method="get" id="ddgSearch" action="https://duckduckgo.com/" target="_blank">
+            <!--k7=Background-->
+            <input type="hidden" name="k7" value="{{ddgBackgroundcolor}}"/> <!--k1=Ads-->
+            <!--k1 ads-->
+            <input type="hidden" name="k1" value="-1"/>
+            <!--k8=Text-->
+            <input type="hidden" name="k8" value="{{ddgTextcolor}}"/>
+            <!--k9=Links-->
+            <input type="hidden" name="k9" value="{{ddgLinkcolor}}"/>
+            <!--kx=URLs-->
+            <input type="hidden" name="kx" value="{{ddgURLcolor}}"/>
+            <!--kj=Header-->
+            <input type="hidden" name="kj" value="{{ddgHeadercolor}}"/>
+            <!--kt=Font-->
+            <input type="hidden" name="kt" value="c"/>
+            <!--kp=Safe Search-->
+            <input type="hidden" name="kp" value="1"/>
+            <input type="text" name="q" placeholder="{{funPlaceholder}}" aria-label="Search on DuckDuckGo"/>
+            <button type="submit" id="searchB">Search</button>
+        </form>
+    </div>
 
-funPlaceholder = "This is a placeholder for a function I will add later."
-groups = book.load_groups()
-#I am working on the rest of the new tab page before I circle back to bookmarks.
-@app.route('/')
-def home():
-    device_type = book.deviceType()
-    crembrule=book.crembrule(device_type)
-    return render_template('index.html', **crembrule)
-    
-
-
-
-#this current version only lets you add bookmarks with the console. I need to add a form on a seperate page (or a pop-up of some kind) that will take all of the input parameters that the input functions ask for.
-@app.route('/form')
-def form():
-    return   "<form action='/submit' method='POST'><button type='submit' name='my_button'>Press Me!</button></form>"
-@app.route('/form/submit', methods=['POST'])
-def submit():
-    book.add_bookmark_loop()
-    return "Bookmarks updated. You can close this tab."
-
-if __name__ == '__main__':
-    app.run(debug=True)
+</body>
