@@ -71,9 +71,11 @@ def backgroundImage(device_type, darkmode):
             bgImage = random.choice(choices)
     else:
         if darkmode==True:
-            bgImage = "pilot.png"
+            choices=["4d.png","2d.png"]
+            bgImage = random.choice(choices)
         else:
-            bgImage = "pilot.png"
+            choices=["1d.png","3d.png"]
+            bgImage = random.choice(choices)
     return bgImage
 
 def calculate_luminance(palette):
@@ -126,9 +128,9 @@ def engine_crembrule(device_type, darkmode, backgroundImage):
 
 def css_crembrule(device_type, darkmode, backgroundImage):
     hex_palette= rgb_to_hex(palette(device_type, darkmode, backgroundImage))
-    ntBackgroundcolor = "#"+hex_palette[4]
+    ntBackgroundcolor = "#"+hex_palette[0]
     ntBarcolor = "#"+hex_palette[3]
-    ntTextcolor = "#"+hex_palette[0]
+    ntTextcolor = "#"+hex_palette[4]
     ntButtoncolor = "#"+hex_palette[2]
     ntBordercolor = "#"+hex_palette[1]
     css_crembrule={
