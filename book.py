@@ -62,14 +62,16 @@ def deviceType():
     return device_type
 
 def backgroundImage(device_type, darkmode):
-    if device_type == 'Phone':
+    if device_type == 'Desktop':
         if darkmode==True:
-            bgImage = "1.png"
+            choices=["4.png","2.png"]
+            bgImage = random.choice(choices)
         else:
-            bgImage = "pilot.png"
+            choices=["1.png","3.png"]
+            bgImage = random.choice(choices)
     else:
         if darkmode==True:
-            bgImage = "1.png"
+            bgImage = "pilot.png"
         else:
             bgImage = "pilot.png"
     return bgImage
