@@ -194,6 +194,24 @@ form.addEventListener('submit', async (e) => {
 
 
 
+<form method="get" action="/spiritual-thought">
+    <button type="submit" id="spiritual">Sprititual Thought</button>
+</form>
+{% if thought %}
+<div style="
+    position: fixed;
+    bottom: 30px;
+    left: 20px;
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    z-index: 999;
+">
+    <p>{{thought}}</p>
+</div>
+{% endif %}
+
 
 
     <div style="position: fixed; bottom: 20px; right: 20px;">

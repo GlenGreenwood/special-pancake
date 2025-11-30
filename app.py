@@ -8,15 +8,17 @@ import re
 import random
 from datetime import datetime, timedelta
 import codecs
+from urllib.parse import quote
 
 def rot13(text):
     return codecs.encode(text, 'rot_13')
 
 app = Flask(__name__)
 
+
 #this sets up the variable for later, but I need to figure out how to make it persist between sessions.
 darkmode = False
-
+pressed = False
 try:
     with open("placeholder.json", "r") as f:
         placeholderlist = json.load(f)
@@ -33,6 +35,8 @@ groups = book.load_groups()
 #I am working on the rest of the new tab page before I circle back to bookmarks.
 @app.route('/')
 def home():
+    #get the spiritual thought if requested.
+    thought = request.args.get("thought")
     #this gets a random fun fact from an API to use as a placeholder in the search bar.
     data = requests.get("https://uselessfacts.jsph.pl/random.json?language=en").json()
     fact = "Fun Fact: "+data["text"]
@@ -44,11 +48,11 @@ def home():
         placeholderlist = [fact, fact, fact, fact, fact, fact, "This is a placeholder for a function I will add later."]
     funPlaceholder = random.choice(list(placeholderlist)) if placeholderlist else "Search..."
     device_type = book.deviceType()
-    bgImage=book.backgroundImage(device_type, darkmode)
+    bgImage=book.backgroundImage(device_type, darkmode, pressed)
     backgroundImage=bgImage    #f"{bgImage}?v={int(time())}" #f"/workspaces/special-pancake/static/{}"
     engine_crembrule=book.engine_crembrule(device_type, darkmode, backgroundImage)
     css_crembrule=book.css_crembrule(device_type, darkmode, backgroundImage)
-    return render_template('index.html', **engine_crembrule, **css_crembrule, funPlaceholder=funPlaceholder, backgroundImage=bgImage, fact=fact)
+    return render_template('index.html', **engine_crembrule, **css_crembrule, funPlaceholder=funPlaceholder, backgroundImage=bgImage, fact=fact, thought=thought)
     
 
 @app.route('/set-theme', methods=['POST'])
@@ -101,7 +105,7 @@ def load_bookmarks():
     bookmark_list = []
     for group in data.values():
         for url in group:
-            bookmark_list.append(url.replace("https://","").replace("http://","").replace("www.",""))
+            bookmark_list.append(f"{url} 🔖".replace("https://","").replace("http://","").replace("www.",""))
     return bookmark_list
 
 def load_search_history(max_age_days=10):
@@ -117,7 +121,7 @@ def load_search_history(max_age_days=10):
     for query, info in history.items():
         last_used = datetime.fromisoformat(info["last_used"])
         if now - last_used <= timedelta(days=max_age_days):
-            filtered.append(query)
+            filtered.append(query + "⏳")
     return filtered
 
 def load_static_suggestions():
@@ -148,6 +152,14 @@ def suggestions():
         filtered = filtered + fact + [rot13(query)]
 
     return jsonify(filtered)
+
+
+@app.route('/spiritual-thought', methods=['GET','POST'])
+def spiritual_thought_button():
+    device_type = book.deviceType()
+    thought = book.SpirtualThought(device_type, darkmode)
+    # urlencode the thought so it’s safe in the URL
+    return redirect(f"/?thought={quote(thought)}")
 
 if __name__ == '__main__':
     app.run(debug=True)

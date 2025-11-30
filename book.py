@@ -69,21 +69,30 @@ def deviceType():
         device_type = 'Desktop'
     return device_type
 
-def backgroundImage(device_type, darkmode):
-    if device_type == 'Phone':
-        if darkmode==True:
-            choices=["4.png","2.png"]
+def backgroundImage(device_type, darkmode, pressed):
+    if pressed=="true":
+        if device_type == 'Phone':
+            choices=["1cp.png","2cp.png", "3cp.png", "4cp.png"]
             bgImage = random.choice(choices)
+
         else:
-            choices=["1.png","3.png"]
+            choices=["1cd.jpeg", "2cd.jpeg","3d.jpeg"]
             bgImage = random.choice(choices)
     else:
-        if darkmode==True:
-            choices=["4d.png","2d.png"]
-            bgImage = random.choice(choices)
+        if device_type == 'Phone':
+            if darkmode==True:
+                choices=["4.png","2.png"]
+                bgImage = random.choice(choices)
+            else:
+                choices=["1.png","3.png"]
+                bgImage = random.choice(choices)
         else:
-            choices=["1d.png","3d.png"]
-            bgImage = random.choice(choices)
+            if darkmode==True:
+                choices=["4d.png","2d.png"]
+                bgImage = random.choice(choices)
+            else:
+                choices=["1d.png","3d.png"]
+                bgImage = random.choice(choices)
     return bgImage
 
 def calculate_luminance(palette):
@@ -151,8 +160,16 @@ def css_crembrule(device_type, darkmode, backgroundImage):
     return css_crembrule
 
 
-def SpirtualThought():
-    pass
+def SpirtualThought(device_type, darkmode):
+    backgroundImage(device_type, darkmode, pressed=True)
+    thoughts=[]
+    try:
+        with open('thoughts.json', 'r') as json_file:
+            thoughts.extend(json.load(json_file))
+    except:
+        thoughts=["Proverbs 3:5-6: Trust in the Lord with all thy heart; and lean not unto thine own understanding. In all thy ways acknowledge him, and he shall direct thy paths.", "Pray, He is there. Speak, He is listening. You are His child His love now surrounds you. --Child's Prayer, Children's Songbook"]
+    thought = random.choice(thoughts)
+    return thought
 
 def waysToSayGL():
     pass
