@@ -94,7 +94,7 @@ def rgb_to_hex(rgb_colors):
     return hex_colors
 
 def palette(device_type, darkmode, backgroundImage):
-    bgImage = backgroundImage
+    bgImage = f"/workspaces/special-pancake/static/{backgroundImage}"
     color_thief = ColorThief(bgImage)
     palette=color_thief.get_palette(color_count=5)
     return palette

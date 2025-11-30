@@ -14,7 +14,7 @@ groups = book.load_groups()
 def home():
     device_type = book.deviceType()
     bgImage=book.backgroundImage(device_type, darkmode)
-    backgroundImage=f"/workspaces/special-pancake/static/{bgImage}"
+    backgroundImage=bgImage #f"/workspaces/special-pancake/static/{}"
     engine_crembrule=book.engine_crembrule(device_type, darkmode, backgroundImage)
     css_crembrule=book.css_crembrule(device_type, darkmode, backgroundImage)
     return render_template('index.html', **engine_crembrule, **css_crembrule, funPlaceholder=funPlaceholder, backgroundImage=bgImage)
