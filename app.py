@@ -3,7 +3,6 @@ from flask import Flask, request, redirect, render_template
 import json
 import webbrowser
 from colorthief import ColorThief
-from colorthief import ColorThief
 app = Flask(__name__)
 
 #this will be used later to toggle dark mode on and off.
@@ -27,6 +26,10 @@ def home():
 @app.route('/form')
 def form():
     return   "<form action='/submit' method='POST'><button type='submit' name='my_button'>Press Me!</button></form>"
+
+
+
+
 @app.route('/form/submit', methods=['POST'])
 def submit():
     book.add_bookmark_loop()
