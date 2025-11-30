@@ -10,6 +10,7 @@ app = Flask(__name__)
 darkmode = True
 funPlaceholder = "This is a placeholder for a function I will add later."
 groups = book.load_groups()
+
 #I am working on the rest of the new tab page before I circle back to bookmarks.
 @app.route('/')
 def home():
@@ -21,7 +22,15 @@ def home():
     return render_template('index.html', **engine_crembrule, **css_crembrule, funPlaceholder=funPlaceholder, backgroundImage=bgImage)
     
 
-
+@app.route('/set-theme', methods=['POST'])
+def set_theme():
+    global darkmode
+    selected_theme = request.form.get('theme')
+    if selected_theme == 'dark':
+        darkmode = True
+    else:
+        darkmode = False
+    return redirect('/')
 
 #this current version only lets you add bookmarks with the console. I need to add a form on a seperate page (or a pop-up of some kind) that will take all of the input parameters that the input functions ask for.
 @app.route('/form')
