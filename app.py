@@ -15,7 +15,7 @@ def rot13(text):
 app = Flask(__name__)
 
 #this will be used later to toggle dark mode on and off.
-darkmode = True
+darkmode = False
 
 try:
     with open("placeholder.json", "r") as f:
