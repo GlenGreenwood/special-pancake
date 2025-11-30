@@ -3,7 +3,7 @@ from flask import Flask, request, redirect, render_template
 import json
 import webbrowser
 from colorthief import ColorThief
-from time import time
+#from time import time
 app = Flask(__name__)
 
 #this will be used later to toggle dark mode on and off.
