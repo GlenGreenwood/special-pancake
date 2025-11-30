@@ -14,7 +14,7 @@ def rot13(text):
 
 app = Flask(__name__)
 
-#this will be used later to toggle dark mode on and off.
+#this sets up the variable for later, but I need to figure out how to make it persist between sessions.
 darkmode = False
 
 try:
@@ -73,7 +73,7 @@ def form():
 def submit():
     book.add_bookmark_loop()
     return "Bookmarks updated. You can close this tab."
-
+#This is great unless it saves a fun fact, or it keeps unneccesary history items. Also, not great for privacy or efficiency.
 @app.route("/update-history", methods=["POST"])
 def update_history():
     data = request.get_json()
@@ -104,7 +104,7 @@ def load_bookmarks():
             bookmark_list.append(url.replace("https://","").replace("http://","").replace("www.",""))
     return bookmark_list
 
-def load_search_history(max_age_days=30):
+def load_search_history(max_age_days=10):
     try:
         with open("search_history.json") as f:
             history = json.load(f)

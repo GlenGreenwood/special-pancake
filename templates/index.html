@@ -25,6 +25,7 @@
             border-radius:25px;
             padding: 12px 2px;
             margin: 20px 0px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
         }
         button{
             background-color:{{ntButtoncolor}};
@@ -62,9 +63,8 @@
     </style>
 </head>
 <body>
-    <h1>New Tab</h1>
     <div id="bar" style="margin:auto; border-width:7px; position:relative;">
-        <form method="get" id="ddgSearch" action="https://duckduckgo.com/" target="_blank">
+        <form method="get" id="ddgSearch" action="https://duckduckgo.com/" target="_self">
             <!--k7=Background-->
             <input type="hidden" name="k7" value="{{ddgBackgroundcolor}}"/> <!--k1=Ads-->
             <!--k1 ads-->
