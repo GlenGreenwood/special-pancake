@@ -64,12 +64,12 @@ def deviceType():
 def backgroundImage(device_type, darkmode):
     if device_type == 'Phone':
         if darkmode==True:
-            bgImage = "pilot.png"
+            bgImage = "1.png"
         else:
             bgImage = "pilot.png"
     else:
         if darkmode==True:
-            bgImage = "pilot.png"
+            bgImage = "1.png"
         else:
             bgImage = "pilot.png"
     return bgImage
