@@ -7,7 +7,7 @@
             background-color:{{ntBackgroundcolor}};
             color:{{ntTextcolor}};
             text-align:center;
-            background-image: url('static/{{backgroundImage}}');
+            background-image: url('{{ url_for("static", filename=backgroundImage) }}');
             background-size: contain;
             background-position: center;
             background-repeat: no-repeat;

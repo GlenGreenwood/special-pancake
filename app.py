@@ -3,6 +3,7 @@ from flask import Flask, request, redirect, render_template
 import json
 import webbrowser
 from colorthief import ColorThief
+from time import time
 app = Flask(__name__)
 
 #this will be used later to toggle dark mode on and off.
@@ -14,7 +15,7 @@ groups = book.load_groups()
 def home():
     device_type = book.deviceType()
     bgImage=book.backgroundImage(device_type, darkmode)
-    backgroundImage=bgImage #f"/workspaces/special-pancake/static/{}"
+    backgroundImage=bgImage    #f"{bgImage}?v={int(time())}" #f"/workspaces/special-pancake/static/{}"
     engine_crembrule=book.engine_crembrule(device_type, darkmode, backgroundImage)
     css_crembrule=book.css_crembrule(device_type, darkmode, backgroundImage)
     return render_template('index.html', **engine_crembrule, **css_crembrule, funPlaceholder=funPlaceholder, backgroundImage=bgImage)
