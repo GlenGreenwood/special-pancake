@@ -37,6 +37,28 @@
         input::placeholder {
         color: {{ntBackgroundcolor}}; 
         }
+        
+    #autocomplete-list {
+        border: 1px solid #ccc;
+        background-color: #fff;
+        max-height: 200px;
+        overflow-y: auto;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+        position: absolute;
+        width: 50%; /* match input width */
+        display: none;
+        z-index: 1000;
+    }
+    #autocomplete-list li {
+        padding: 5px 10px;
+        cursor: pointer;
+    }
+    #autocomplete-list li:hover {
+       background-color: #eee;
+    }
+
     </style>
 </head>
 <body>
@@ -60,21 +82,52 @@
             <!--kp=Safe Search-->
             <input type="hidden" name="kp" value="1"/>
             <input type="text" name="q" id="search" placeholder="{{funPlaceholder}}" aria-label="Search on DuckDuckGo"/>
-            <ul id="autocomplete-list" style="border:1px solid #ccc; display:none; position:absolute;"></ul>
+            <ul id="autocomplete-list"></ul>
             <button type="submit" id="searchB">Search</button>
         </form>
     </div>
 
     
-
 <script>
 const input = document.getElementById('search');
 const list = document.getElementById('autocomplete-list');
+const form = document.getElementById('ddgSearch');
 
-// Ensure the parent container is relatively positioned for absolute positioning
+// Ensure the parent container is relatively positioned
 const bar = document.getElementById('bar');
 bar.style.position = 'relative';
 
+// Helper to create a list item
+function createItem(text) {
+    const item = document.createElement('li');
+    item.textContent = text;
+    item.style.padding = '5px 10px';
+    item.style.cursor = 'pointer';
+    item.style.listStyle = 'none';
+
+    item.addEventListener('click', async () => {
+        input.value = text;
+        list.style.display = 'none';
+
+        // Send used search to backend to update history
+        try {
+            await fetch('/update-history', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: text })
+            });
+        } catch (e) {
+            console.error('Failed to update history:', e);
+        }
+
+        // Submit the form
+        form.submit();
+    });
+
+    return item;
+}
+
+// Fetch suggestions as user types
 input.addEventListener('input', async () => {
     const query = input.value.trim();
     if (!query) {
@@ -83,44 +136,32 @@ input.addEventListener('input', async () => {
     }
 
     try {
-        // DuckDuckGo autocomplete API
-        const response = await fetch(`https://api.duckduckgo.com/ac/?q=${encodeURIComponent(query)}`);
+        const response = await fetch(`/suggestions?q=${encodeURIComponent(query)}`);
         const suggestions = await response.json();
 
-        // Clear previous results
+        // Clear previous suggestions
         list.innerHTML = '';
 
-        // Populate new suggestions
         suggestions.forEach(s => {
-            const text = typeof s === 'string' ? s : s.phrase;
-            const item = document.createElement('li');
-            item.textContent = text;
-            item.style.padding = '5px 10px';
-            item.style.cursor = 'pointer';
-            item.style.listStyle = 'none';
-
-            item.addEventListener('click', () => {
-                input.value = text;
-                list.style.display = 'none';
-            });
-
-            list.appendChild(item);
+            list.appendChild(createItem(s));
         });
 
-        // Show the list and match the input width
-        list.style.display = 'block';
-        list.style.position = 'absolute';
-        list.style.top = `${input.offsetTop + input.offsetHeight}px`;
-        list.style.left = `${input.offsetLeft}px`;
-        list.style.width = `${input.offsetWidth}px`;
-        list.style.backgroundColor = '#fff';
-        list.style.border = '1px solid #ccc';
-        list.style.maxHeight = '200px';
-        list.style.overflowY = 'auto';
-        list.style.padding = '0';
-        list.style.margin = '0';
-        list.style.zIndex = '1000';
-
+        if (suggestions.length > 0) {
+            list.style.display = 'block';
+            list.style.position = 'absolute';
+            list.style.top = `${input.offsetTop + input.offsetHeight}px`;
+            list.style.left = `${input.offsetLeft}px`;
+            list.style.width = `${input.offsetWidth}px`;
+            list.style.zIndex = '1000';
+            list.style.backgroundColor = '#fff';
+            list.style.border = '1px solid #ccc';
+            list.style.maxHeight = '200px';
+            list.style.overflowY = 'auto';
+            list.style.padding = '0';
+            list.style.margin = '0';
+        } else {
+            list.style.display = 'none';
+        }
     } catch (error) {
         console.error('Autocomplete error:', error);
         list.style.display = 'none';
@@ -133,7 +174,25 @@ document.addEventListener('click', (e) => {
         list.style.display = 'none';
     }
 });
+
+// Optional: update history on form submit if user typed something manually
+form.addEventListener('submit', async (e) => {
+    const query = input.value.trim();
+    if (!query) return;
+    try {
+        await fetch('/update-history', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query })
+        });
+    } catch (e) {
+        console.error('Failed to update history:', e);
+    }
+});
 </script>
+
+
+
 
 
 

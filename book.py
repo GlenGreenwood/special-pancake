@@ -4,6 +4,7 @@ from flask import Flask, request, redirect
 from colorthief import ColorThief
 from user_agents import parse
 import random
+import re
 
 # Establishing default bookmark groups and loading any existing bookmarks from a JSON file
 def load_groups():
@@ -50,6 +51,13 @@ def open_selection(select):
 def choose_bookmarks():
     choice = f"bookmarks{input('what set of bookmarks do you want to open? (1, 2, or 3)? ')}"
     open_selection(groups[choice])
+
+def simplify_url(url):
+    """Strip https://, http://, www., and trailing slash."""
+    url = re.sub(r'^https?://', '', url)
+    url = re.sub(r'^www\.', '', url)
+    url = url.rstrip('/')
+    return url
 
 def deviceType():
     user_agent = request.headers.get('User-Agent')
