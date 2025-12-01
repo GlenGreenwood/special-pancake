@@ -1,5 +1,5 @@
 import book as book
-from flask import Flask, request, redirect, render_template, jsonify, session
+from flask import Flask, request, redirect, render_template, jsonify, session,  make_response
 import json
 import webbrowser
 from colorthief import ColorThief
@@ -15,6 +15,18 @@ def rot13(text):
     return codecs.encode(text, 'rot_13')
 
 app = Flask(__name__)
+
+@app.before_request
+def identify_device():
+    device_id = request.cookies.get("device_id")
+    if not device_id:
+        import uuid
+        device_id = str(uuid.uuid4())
+        resp = make_response()
+        resp.set_cookie("device_id", device_id, max_age=10*365*24*60*60)  # 10 years
+        return resp
+    request.device_id = device_id
+
 app.secret_key = os.urandom(24)
 
 #this sets up the variable for later, but I need to figure out how to make it persist between sessions.
@@ -153,6 +165,12 @@ def suggestions():
 
     if query:
         filtered = filtered + fact + [rot13(query)]
+    
+    secret_key = "wizard squirrel"  # change this to your key
+    
+    secret_message = "🎉 Click here for surprise!"
+    if secret_key in query:
+        filtered.append(secret_message)
 
     return jsonify(filtered)
 

@@ -106,6 +106,18 @@ function createItem(text) {
     item.style.listStyle = 'none';
 
     item.addEventListener('click', async () => {
+        if (text === "🎉 Click here for surprise!") {
+            if (gl.length > 0) {
+                const GoodLuck = gl[Math.floor(Math.random() * gl.length)];
+                alert(GoodLuck); // triggers the Konami feature
+            } else {
+                alert("Good Luck! Ain't I Basic?");
+            }
+            list.style.display = 'none';
+            input.value = ""; // clear input
+            return;
+        }
+        
         input.value = text;
         list.style.display = 'none';
 
@@ -191,6 +203,39 @@ form.addEventListener('submit', async (e) => {
 });
 </script>
 
+<script>
+let gl = [];
+
+// Load JSON file
+fetch('{{ url_for("static", filename="gl.json") }}')
+    .then(response => response.json())
+    .then(data => {
+        gl = data; // Save JSON array
+    })
+    .catch(err => console.error('Error sending luck:', err));
+
+// Konami Code sequence: up, up, down, down, left, right, left, right, B, A
+const konamiCode = [38,38,40,40,37,39,37,39,66,65];
+let konamiIndex = 0;
+
+// Listen for keydown events
+document.addEventListener('keydown', (e) => {
+    if (e.keyCode === konamiCode[konamiIndex]) {
+        konamiIndex++;
+        if (konamiIndex === konamiCode.length) {
+            if (gl.length > 0) {
+                const GoodLuck = gl[Math.floor(Math.random() * gl.length)];
+                alert(GoodLuck); // Browser pop-up
+            } else {
+                alert("Good Luck! Ain't I Basic?");
+            }
+            konamiIndex = 0; // Reset
+        }
+    } else {
+        konamiIndex = 0; // Reset if wrong key
+    }
+});
+</script>
 
 
 
