@@ -1,5 +1,5 @@
 import book as book
-from flask import Flask, request, redirect, render_template, jsonify
+from flask import Flask, request, redirect, render_template, jsonify, session
 import json
 import webbrowser
 from colorthief import ColorThief
@@ -9,12 +9,13 @@ import random
 from datetime import datetime, timedelta
 import codecs
 from urllib.parse import quote
+import os
 
 def rot13(text):
     return codecs.encode(text, 'rot_13')
 
 app = Flask(__name__)
-
+app.secret_key = os.urandom(24)
 
 #this sets up the variable for later, but I need to figure out how to make it persist between sessions.
 darkmode = False
@@ -48,6 +49,7 @@ def home():
         placeholderlist = [fact, fact, fact, fact, fact, fact, "This is a placeholder for a function I will add later."]
     funPlaceholder = random.choice(list(placeholderlist)) if placeholderlist else "Search..."
     device_type = book.deviceType()
+    pressed = session.get('pressed', False)
     bgImage=book.backgroundImage(device_type, darkmode, pressed)
     backgroundImage=bgImage    #f"{bgImage}?v={int(time())}" #f"/workspaces/special-pancake/static/{}"
     engine_crembrule=book.engine_crembrule(device_type, darkmode, backgroundImage)
@@ -59,6 +61,7 @@ def home():
 def set_theme():
     global darkmode
     selected_theme = request.form.get('theme')
+    session['pressed'] = False
     if selected_theme == 'dark':
         darkmode = True
     else:
@@ -157,6 +160,7 @@ def suggestions():
 @app.route('/spiritual-thought', methods=['GET','POST'])
 def spiritual_thought_button():
     device_type = book.deviceType()
+    session['pressed'] = True
     thought = book.SpirtualThought(device_type, darkmode)
     # urlencode the thought so it’s safe in the URL
     return redirect(f"/?thought={quote(thought)}")

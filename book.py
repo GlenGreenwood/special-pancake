@@ -70,13 +70,13 @@ def deviceType():
     return device_type
 
 def backgroundImage(device_type, darkmode, pressed):
-    if pressed=="true":
+    if pressed== True:
         if device_type == 'Phone':
             choices=["1cp.png","2cp.png", "3cp.png", "4cp.png"]
             bgImage = random.choice(choices)
 
         else:
-            choices=["1cd.jpeg", "2cd.jpeg","3d.jpeg"]
+            choices=["1cd.jpeg", "2cd.jpeg","3cd.jpeg"]
             bgImage = random.choice(choices)
     else:
         if device_type == 'Phone':
@@ -161,7 +161,8 @@ def css_crembrule(device_type, darkmode, backgroundImage):
 
 
 def SpirtualThought(device_type, darkmode):
-    backgroundImage(device_type, darkmode, pressed=True)
+    pressed=True
+    #backgroundImage(device_type, darkmode, pressed)
     thoughts=[]
     try:
         with open('thoughts.json', 'r') as json_file:

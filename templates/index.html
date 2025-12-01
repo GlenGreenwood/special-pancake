@@ -64,7 +64,7 @@
 </head>
 <body>
     <div id="bar" style="margin:auto; border-width:7px; position:relative;">
-        <form method="get" id="ddgSearch" action="https://duckduckgo.com/" target="_self">
+        <form method="get" id="ddgSearch" action="https://duckduckgo.com/" target="_self" autocomplete="off">
             <!--k7=Background-->
             <input type="hidden" name="k7" value="{{ddgBackgroundcolor}}"/> <!--k1=Ads-->
             <!--k1 ads-->
@@ -81,7 +81,7 @@
             <input type="hidden" name="kt" value="c"/>
             <!--kp=Safe Search-->
             <input type="hidden" name="kp" value="1"/>
-            <input type="text" name="q" id="search" placeholder="{{funPlaceholder}}" aria-label="Search on DuckDuckGo"/>
+            <input type="text" name="q" id="search" placeholder="{{funPlaceholder}}" aria-label="Search on DuckDuckGo" autocomplete="new-password" data-lpignore="true" data-form-type="other"/>
             <ul id="autocomplete-list"></ul>
             <button type="submit" id="searchB">Search</button>
         </form>
@@ -197,19 +197,41 @@ form.addEventListener('submit', async (e) => {
 <form method="get" action="/spiritual-thought">
     <button type="submit" id="spiritual">Sprititual Thought</button>
 </form>
+
 {% if thought %}
-<div style="
+<div id="thoughtPopup" style="
     position: fixed;
     bottom: 30px;
     left: 20px;
-    background: white;
+    background: {{ntBackgroundcolor}};
+    color: {{ntTextcolor}};
+    border: 2px solid {{ntBordercolor}};
     padding: 15px;
     border-radius: 10px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.3);
     z-index: 999;
+    cursor: pointer;
 ">
-    <p>{{thought}}</p>
+    <p>{{thought | safe}}</p>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const popup = document.getElementById('thoughtPopup');
+    if (!popup) return; // Exit if popup doesn't exist
+
+    popup.addEventListener('click', () => {
+        // Apply smooth fade-out
+        popup.style.transition = "opacity 0.3s ease";
+        popup.style.opacity = "0";
+
+        // Remove from display after transition
+        setTimeout(() => {
+            popup.style.display = "none";
+        }, 300);
+    });
+});
+</script>
 {% endif %}
 
 
