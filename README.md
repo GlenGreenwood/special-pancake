@@ -1,0 +1,1 @@
+This was a fun project I did to send to a friend. It demonstrates my experience with the Python module Flask, which I am continuing to learn and refine. This project has some bus that were introduced as I tried to add more privacy focused features and allow long-term use on different devices.
